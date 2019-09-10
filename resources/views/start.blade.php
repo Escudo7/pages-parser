@@ -8,5 +8,8 @@
             crossorigin="anonymous">
     </head>
     <body>
+        <nav class="navbar">
+            <a class="navbar-brand" href="#">Pages Parser</a>
+        </nav>
     </body>
 </html>

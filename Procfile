@@ -1,1 +1,1 @@
-web: php public/index.php
+web: vender/bin/heroku-php-apache2 public/

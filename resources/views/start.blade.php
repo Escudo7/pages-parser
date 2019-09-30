@@ -4,7 +4,7 @@
     <div class="jumbotron">
         <h1 class="display-4">Pages Parser</h1>
         <hr class="my-4">
-        <form action="/domains" method="post">
+        <form action="{{ route('domains.store') }}" method="post">
             <label class="lead">
                 Enter pages adress
             </label>

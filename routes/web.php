@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +18,8 @@ $router->get('/', function () use ($router) {
     return view('start');
 });
 
-$router->post('domains', ['as' => 'domains.store', function () use ($router) {
-    $input = $_POST;
-    DB::table('domains')->insert(['name' => $input['pagesAdress']]);
+$router->post('/domains', ['as' => 'domains.store', function (Request $request) use ($router) {
+    DB::table('domains')->insert(['name' => $request['pagesAdress']]);
     $id = DB::table('domains')->max('id');
     return redirect()->route('domains.show', ['id' => $id]);
 }]);

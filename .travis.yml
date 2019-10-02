@@ -4,4 +4,4 @@ before_script:
   - cp .env.travis .env
 script: 
   - make lint
-  - vendor/bin/phpunit --configuration $DB.phpunit.xml
+  - vendor/bin/phpunit --configuration phpunit.xml

@@ -19,11 +19,15 @@ class PagesTest extends TestCase
 
     public function testPostDomains()
     {   
-        
-        $data = ['pagesAdress' => 'lumen.laravel.com'];
+        $data = ['pagesAdress' => 'http://lumen.laravel.com'];
         $response = $this->call('POST', route('domains.store'), $data);
         $this->seeStatusCode(302);
         $this->assertEquals(1, DB::table('domains')->count());
-        $this->seeInDatabase('domains', ['name' => 'lumen.laravel.com']);
+        $this->seeInDatabase('domains', ['name' => 'http://lumen.laravel.com']);
+
+        $data2 = ['pagesAdress' => 'lumen.laravel.com'];
+        $response = $this->call('POST', route('domains.store'), $data2);
+        $this->seeStatusCode(302);
+        $this->assertEquals(1, DB::table('domains')->count());
     }
 }

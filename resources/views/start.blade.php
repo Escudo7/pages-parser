@@ -8,7 +8,12 @@
             <label class="lead">
                 Enter pages adress
             </label>
-            <input type="text" required name="pagesAdress" class="lead">
+            @if($errors)
+                @foreach($errors as $error)
+                    <p style="color:red">{{ $error }}</p>
+                @endforeach
+            @endif
+            <input type="text" required name="pagesAdress" class="lead" value=<?= $url ?? ''?>>
             <input type="submit" value="Enter" class="btn btn-primary btn-lg">
         </form>
     </div>

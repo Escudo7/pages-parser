@@ -39,8 +39,11 @@ class PagesTest extends TestCase
     public function testDomainsIndex()
     {
         $this->assertEquals(0, DB::table('domains')->count());
-        $data = ['pagesAdress' => 'http://lumen.laravel.com'];
-        $response = $this->call('POST', route('domains.store'), $data);
+        $data1 = ['pagesAdress' => 'http://lumen.laravel.com'];
+        $data2 = ['pagesAdress' => 'http://fantlab.ru'];
+        $this->call('POST', route('domains.store'), $data1);
+        $this->call('POST', route('domains.store'), $data2);
+        $this->assertEquals(2, DB::table('domains')->count());
         $response = $this->call('GET', route('domains.index'));
         $this->assertEquals(200, $response->status());
     }

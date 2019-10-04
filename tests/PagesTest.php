@@ -13,7 +13,7 @@ class PagesTest extends TestCase
     public function testStartPages()
     {
         $this->assertEquals(0, DB::table('domains')->count());
-        $response = $this->call('GET', route('start'));
+        $response = $this->call('GET', route('domains.create'));
         $this->assertEquals(200, $response->status());
     }
 

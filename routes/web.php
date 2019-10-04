@@ -15,12 +15,12 @@ use Illuminate\Http\Request;
 |
 */
 
-$router->get('/', ['as' => 'start', function (Request $request) use ($router) {
+$router->get('/', ['as' => 'domains.create', function (Request $request) use ($router) {
     $data = [
         'errors' => $request['errors'],
         'url' => $request['url']
     ];
-    return view('start', $data);
+    return view('domain.create', $data);
 }]);
 
 $router->post('/domains', ['as' => 'domains.store', function (Request $request) use ($router) {
@@ -32,7 +32,7 @@ $router->post('/domains', ['as' => 'domains.store', function (Request $request) 
             'errors' => $validator->errors()->all(),
             'url' => $request['pagesAdress']
         ];
-        return redirect()->route('start', $data);
+        return redirect()->route('domains.create', $data);
     }
     DB::table('domains')->insert(['name' => $request['pagesAdress']]);
     $id = DB::table('domains')->max('id');
@@ -41,5 +41,10 @@ $router->post('/domains', ['as' => 'domains.store', function (Request $request) 
 
 $router->get('domains/{id}', ['as' => 'domains.show', function ($id) use ($router) {
     $domain = DB::table('domains')->where('id', $id)->first();
-    return view('domains', ['domain' => $domain]);
+    return view('domain.show', ['domain' => $domain]);
+}]);
+
+$router->get('domains', ['as' => 'domains.index', function () use ($router) {
+    $domains = DB::table('domains')->paginate(10);
+    return view('domain.index', ['domains' => $domains]);
 }]);

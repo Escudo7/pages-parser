@@ -10,8 +10,20 @@
     </head>
     <body>
         @yield('content')
-        <nav class="navbar">
-            <a class="navbar-brand" href="#">Pages Parser</a>
+        <nav class="navbar" style="background-color: #e3f2fd;">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ route('domains.create') }}">Pages Parser</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ route('domains.index') }}">List</a>
+                    </li>
+                </ul>
+            </div>
         </nav>
     </body>
 </html>

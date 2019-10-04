@@ -11,7 +11,7 @@
         @foreach($domains as $domain)
             <tr class='table-info'>
                 <td>{{ $domain->id }}</td>
-                <td>{{ $domain->name }}</td>
+                <td><a href="{{ $domain->name }}">{{ $domain->name }}</a></td>
             </tr>
         @endforeach
     </table>

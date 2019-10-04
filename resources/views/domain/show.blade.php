@@ -10,7 +10,7 @@
         </thead>
         <tr class='table-info'>
             <td>{{ $domain->id }}</td>
-            <td>{{ $domain->name }}</td>
+            <td><a href="{{ $domain->name }}">{{ $domain->name }}</a></td>
         </tr>
     </table>
 @endsection

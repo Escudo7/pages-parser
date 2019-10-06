@@ -52,7 +52,9 @@ if (env('APP_DEBUG')) {
     $app->configure('debugbar');
    }
 
-
+$app->bind('client', function ($app) {
+    return new GuzzleHttp\Client(['timeout' => 3.0]);
+});
 
 /*
 |--------------------------------------------------------------------------

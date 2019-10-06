@@ -1,9 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -15,36 +11,10 @@ use Illuminate\Http\Request;
 |
 */
 
-$router->get('/', ['as' => 'domains.create', function (Request $request) use ($router) {
-    $data = [
-        'errors' => $request['errors'],
-        'url' => $request['url']
-    ];
-    return view('domain.create', $data);
-}]);
+$router->get('/', ['as' => 'domains.create', 'uses' => 'DomainController@create']);
 
-$router->post('/domains', ['as' => 'domains.store', function (Request $request) use ($router) {
-    $validator = Validator::make($request->all(), [
-        'pagesAdress' => 'required|url'
-    ]);
-    if ($validator->fails()) {
-        $data = [
-            'errors' => $validator->errors()->all(),
-            'url' => $request['pagesAdress']
-        ];
-        return redirect()->route('domains.create', $data);
-    }
-    DB::table('domains')->insert(['name' => $request['pagesAdress']]);
-    $id = DB::table('domains')->max('id');
-    return redirect()->route('domains.show', ['id' => $id]);
-}]);
+$router->post('/domains', ['as' => 'domains.store', 'uses' => 'DomainController@store']);
+    
+$router->get('domains/{id}', ['as' => 'domains.show', 'uses' => 'DomainController@show']);
 
-$router->get('domains/{id}', ['as' => 'domains.show', function ($id) use ($router) {
-    $domain = DB::table('domains')->where('id', $id)->first();
-    return view('domain.show', ['domain' => $domain]);
-}]);
-
-$router->get('domains', ['as' => 'domains.index', function () use ($router) {
-    $domains = DB::table('domains')->paginate(10);
-    return view('domain.index', ['domains' => $domains]);
-}]);
+$router->get('domains', ['as' => 'domains.index', 'uses' => 'DomainController@index']);

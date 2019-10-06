@@ -6,12 +6,16 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Content-length</th>
+                <th>Status code</th>
             </tr>
         </thead>
         @foreach($domains as $domain)
             <tr class='table-info'>
                 <td>{{ $domain->id }}</td>
                 <td><a href="{{ $domain->name }}">{{ $domain->name }}</a></td>
+                <td>{{ $domain->content_length }}</td>
+                <td>{{ $domain->status_code }}</td>
             </tr>
         @endforeach
     </table>

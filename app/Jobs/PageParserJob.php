@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Exception\RequestException;
 
 class PageParserJob extends Job
 {
@@ -30,7 +31,7 @@ class PageParserJob extends Job
         $promise = $client->getAsync($this->url);
         $promise->then(
             function($response) {  
-                $body = $response->getBody();
+                $body = utf8_encode($response->getBody());
                 $contentLength = $response->getHeader('Content-Length')[0] ?? strlen($body);
                 DB::table('domains')->insert(
                     [
@@ -40,6 +41,8 @@ class PageParserJob extends Job
                         'body' => $body
                     ]
                 );
+            }, 
+            function(RequestException $e) {
             }
         );
         $promise->wait();

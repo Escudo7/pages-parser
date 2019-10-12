@@ -45,9 +45,8 @@ class DomainController extends Controller
             ['name' => $url]
         );
         $id = DB::table('domains')->max('id');
-        print_r($id);
         dispatch(new PageParserJob($url, $id));
-        //return redirect()->route('domains.show', ['id' => $id]);      
+        return redirect()->route('domains.show', ['id' => $id]);
     }        
 
     public function show($id)

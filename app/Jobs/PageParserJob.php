@@ -9,6 +9,7 @@ class PageParserJob extends Job
 {
     protected $url;
     protected $id;
+    protected $clientName;
     
     /**
      * Create a new job instance.
@@ -16,10 +17,11 @@ class PageParserJob extends Job
      * @return void
      */
 
-    public function __construct($url, $id)
+    public function __construct($url, $id, $clientName = 'productionClient')
     {
         $this->url = $url;
         $this->id = $id;
+        $this->clientName = $clientName;
     }
 
     /**
@@ -29,7 +31,7 @@ class PageParserJob extends Job
      */
     public function handle()
     {
-        $client = app('client');
+        $client = app($this->clientName);
         $promise = $client->getAsync($this->url);
         $promise->then(
             function($response) {  

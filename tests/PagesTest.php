@@ -4,11 +4,7 @@ use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Exception\RequestException;
+use App\Jobs\PageParserJob;
 
 class PagesTest extends TestCase
 {
@@ -53,13 +49,17 @@ class PagesTest extends TestCase
         $this->assertEquals(200, $response->status());
     }
 
-    public function test()
+    public function testPegeParserJob()
     {
-        $mock = new MockHandler([
-            new Response(200, ['X-Foo' => 'Bar']),
-            new Response(202, ['Content-Length' => 0])
-        ]);
-        $handler = HandlerStack::create($mock);
-        $client = new Client(['handler' => $handler]);
+        $clientName = 'testClient';
+        $data1 = ['pagesAdress' => 'http://lumen.laravel.com'];
+        $this->assertEquals(0, DB::table('domains')->count());
+        $this->call('POST', route('domains.store'), $data1);
+        $id = DB::table('domains')->max('id');
+        dispatch(new PageParserJob($data1['pagesAdress'], $id, $clientName));
+        $this->assertEquals(1, DB::table('domains')->count());
+        $this->seeInDatabase('domains', ['body' => 'body']);
+        $this->seeInDatabase('domains', ['status_code' => 200]);
+        $this->seeInDatabase('domains', ['content_length' => 4]);
     }
 }

@@ -37,7 +37,7 @@ class PageParserJob extends Job
         $promise->then(
             function($response) {  
                 $body = utf8_encode($response->getBody());
-                $contentLength = $response->getHeader('Content-Length')[0] ?? strlen($body);
+                $contentLength = strlen($body);
                 DB::table('domains')
                     ->where('id', $this->id)
                     ->update([

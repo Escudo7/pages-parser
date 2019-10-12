@@ -9,7 +9,6 @@ use App\Jobs\PageParserJob;
 
 class DomainController extends Controller
 {
-    protected $clientG;
     
     /**
      * Create a new controller instance.
@@ -18,7 +17,7 @@ class DomainController extends Controller
      */
     public function __construct(\GuzzleHttp\Client $client)
     {
-        $this->clientG = $client;
+        //
     }
 
     public function create(Request $request)
@@ -33,7 +32,7 @@ class DomainController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'pagesAdress' => 'required|url'
+            'pagesAdress' => 'required|url|unique:domains,name'
         ]);
         if ($validator->fails()) {
             $data = [

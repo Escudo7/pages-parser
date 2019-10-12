@@ -57,6 +57,15 @@ $app->bind('productionClient', function ($app) {
         'timeout' => 3.0]);
 });
 $app->bind('testClient', function ($app) {
+    $status = 200;
+    $headers = ['content-length' => 0];
+    $body = 'body';
+    $protocol = '1.1';
+    $mock = new GuzzleHttp\Handler\MockHandler([
+        new GuzzleHttp\Psr7\Response($status, $headers, $body, $protocol)
+    ]);
+    $handler = GuzzleHttp\HandlerStack::create($mock);
+    return new GuzzleHttp\Client(['handler' => $handler]);
 });
 
 /*

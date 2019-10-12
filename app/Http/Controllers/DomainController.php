@@ -31,7 +31,7 @@ class DomainController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'pagesAdress' => 'required|url|unique:domains,name'
+            'pagesAdress' => 'required|url'
         ]);
         if ($validator->fails()) {
             $data = [
@@ -41,9 +41,13 @@ class DomainController extends Controller
             return redirect()->route('domains.create', $data);
         }
         $url = $request['pagesAdress'];
-        dispatch(new PageParserJob($url));
+        DB::table('domains')->insert(
+            ['name' => $url]
+        );
         $id = DB::table('domains')->max('id');
-        return redirect()->route('domains.show', ['id' => $id]);      
+        print_r($id);
+        dispatch(new PageParserJob($url, $id));
+        //return redirect()->route('domains.show', ['id' => $id]);      
     }        
 
     public function show($id)

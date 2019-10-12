@@ -7,7 +7,8 @@ use GuzzleHttp\Exception\RequestException;
 
 class PageParserJob extends Job
 {
-    private $url;
+    protected $url;
+    protected $id;
     
     /**
      * Create a new job instance.
@@ -15,9 +16,10 @@ class PageParserJob extends Job
      * @return void
      */
 
-    public function __construct($url)
+    public function __construct($url, $id)
     {
         $this->url = $url;
+        $this->id = $id;
     }
 
     /**
@@ -33,14 +35,13 @@ class PageParserJob extends Job
             function($response) {  
                 $body = utf8_encode($response->getBody());
                 $contentLength = $response->getHeader('Content-Length')[0] ?? strlen($body);
-                DB::table('domains')->insert(
-                    [
-                        'name' => $this->url,
+                DB::table('domains')
+                    ->where('id', $this->id)
+                    ->update([
                         'content_length' => $contentLength,
                         'status_code' => $response->getStatusCode(),
                         'body' => $body
-                    ]
-                );
+                    ]);
             }, 
             function(RequestException $e) {
             }

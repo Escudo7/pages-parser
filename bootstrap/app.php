@@ -52,12 +52,33 @@ if (env('APP_DEBUG')) {
     $app->configure('debugbar');
    }
 
+<<<<<<< HEAD
 $app->bind('productionClient', function ($app) {
     return new GuzzleHttp\Client([
         'timeout' => 3.0]);
 });
 $app->bind('testClient', function ($app) {
 
+=======
+$app->bind('client', function ($app) {
+    return new GuzzleHttp\Client([
+        'timeout' => 2.0,
+        'base_uri' => 'http://httpbin.org']);
+});
+$app->when('App\Http\Controllers\DomainController')
+->needs('GuzzleHttp\Client')
+->give(function($app) {
+    return new GuzzleHttp\Client([
+        'timeout' => 7.0,
+        'base_uri' => 'http://httpbin.org']);
+});
+$app->when('App\Jobs\PageParserJob')
+->needs('GuzzleHttp\Client')
+->give(function($app) {
+    return new GuzzleHttp\Client([
+        'timeout' => 5.0,
+        'base_uri' => 'http://httpbin.org']);
+>>>>>>> testing queue
 });
 
 /*

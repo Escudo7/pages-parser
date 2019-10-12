@@ -9,14 +9,16 @@ use App\Jobs\PageParserJob;
 
 class DomainController extends Controller
 {
+    protected $clientG;
+    
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(\GuzzleHttp\Client $client)
     {
-        //
+        $this->clientG = $client;
     }
 
     public function create(Request $request)

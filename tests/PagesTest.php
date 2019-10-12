@@ -4,6 +4,11 @@ use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Exception\RequestException;
 
 class PagesTest extends TestCase
 {
@@ -46,5 +51,15 @@ class PagesTest extends TestCase
         $this->assertEquals(2, DB::table('domains')->count());
         $response = $this->call('GET', route('domains.index'));
         $this->assertEquals(200, $response->status());
+    }
+
+    public function test()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['X-Foo' => 'Bar']),
+            new Response(202, ['Content-Length' => 0])
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
     }
 }

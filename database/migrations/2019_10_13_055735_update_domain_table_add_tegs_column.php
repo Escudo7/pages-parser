@@ -16,7 +16,7 @@ class UpdateDomainTableAddTegsColumn extends Migration
         Schema::table('domains', function (Blueprint $table) {
             $table->string('heading')->default('');
             $table->string('keywords')->default('');
-            $table->string('desrciption')->default('');
+            $table->string('description')->default('');
         });
     }
 

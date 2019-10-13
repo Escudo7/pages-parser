@@ -33,7 +33,7 @@ class DomainController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            //'pagesAdress' => 'required|url|unique:domains,name'
+            'pagesAdress' => 'required|url|unique:domains,name'
         ]);
         if ($validator->fails()) {
             $data = [

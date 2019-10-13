@@ -34,7 +34,7 @@ class UpdateDomainTableAddTegsColumn extends Migration
             $table->dropColumn('keywords');
         });
         Schema::table('domains', function (Blueprint $table) {
-            $table->dropColumn('desrciption');
+            $table->dropColumn('description');
         });
     }
 }

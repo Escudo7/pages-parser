@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Client;
 
 class PageParserJob extends Job
 {

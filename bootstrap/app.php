@@ -67,6 +67,9 @@ $app->bind('testClient', function ($app) {
     $handler = GuzzleHttp\HandlerStack::create($mock);
     return new GuzzleHttp\Client(['handler' => $handler]);
 });
+$app->bind('seoParser', function ($app) {
+    return new DiDom\Document();
+});
 
 /*
 |--------------------------------------------------------------------------

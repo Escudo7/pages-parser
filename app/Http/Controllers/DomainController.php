@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Jobs\PageParserJob;
+use App\Jobs\SeoParserJob;
 
 class DomainController extends Controller
 {
@@ -32,7 +33,7 @@ class DomainController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'pagesAdress' => 'required|url|unique:domains,name'
+            //'pagesAdress' => 'required|url|unique:domains,name'
         ]);
         if ($validator->fails()) {
             $data = [
@@ -47,7 +48,8 @@ class DomainController extends Controller
         );
         $id = DB::table('domains')->max('id');
         dispatch(new PageParserJob($url, $id));
-        return redirect()->route('domains.show', ['id' => $id]);     
+        dispatch(new SeoParserJob($url, $id));
+        return redirect()->route('domains.show', ['id' => $id]);
     }        
 
     public function show($id)

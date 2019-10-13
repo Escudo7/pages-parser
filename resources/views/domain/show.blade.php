@@ -8,6 +8,9 @@
                 <th>Name</th>
                 <th>Content-length</th>
                 <th>Status code</th>
+                <th>Heading</th>
+                <th>Keywords</th>
+                <th>Description</th>
             </tr>
         </thead>
         <tr class='table-info'>
@@ -15,6 +18,9 @@
             <td><a href="{{ $domain->name }}">{{ $domain->name }}</a></td>
             <td>{{ $domain->content_length }}</td>
             <td>{{ $domain->status_code }}</td>
+            <td>{{ $domain->heading }}</td>
+            <td>{{ $domain->keywords }}</td>
+            <td>{{ $domain->description }}</td>
         </tr>
     </table>
 @endsection

@@ -31,8 +31,13 @@ class SeoParserJob extends Job
      */
     public function handle()
     {
-        $document = app($this->seoParserName);
-        $document->loadHtmlFile($this->url);
+        try {
+            $document = app($this->seoParserName);
+            $document->loadHtmlFile($this->url);
+        } catch (\Exception $e) {
+            return;
+        }
+        
         $heading = $document->has('h1') ?
             $document->find('h1')[0]->text() :
                 '';

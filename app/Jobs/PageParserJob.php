@@ -32,23 +32,37 @@ class PageParserJob extends Job
     public function handle()
     {
         $client = app($this->clientName);
-        $promise = $client->getAsync($this->url);
-        $promise->then(
-            function($response) {  
-                $body = utf8_encode($response->getBody());
-                $contentLength = strlen($body);
-                DB::table('domains')
+        
+        try {
+            $promise = $client->getAsync($this->url);
+            $promise->then(
+                function($response) {  
+                    $body = utf8_encode($response->getBody());
+                    $contentLength = strlen($body);
+                    DB::table('domains')
+                        ->where('id', $this->id)
+                        ->update([
+                            'content_length' => $contentLength,
+                            'status_code' => $response->getStatusCode(),
+                            'body' => $body
+                        ]);
+                }
+            );
+            $promise->wait();
+        } catch (RequestException $e) {
+            if ($e instanceof \GuzzleHttp\Exception\ConnectException) {
+                $statusCode = "Bad connect!";
+            } elseif ($e->hasResponse()) {
+                $statusCode = $e->getResponse()->getStatusCode();
+            } else {
+                $statusCode = 'ERROR';
+            }
+            DB::table('domains')
                     ->where('id', $this->id)
                     ->update([
-                        'content_length' => $contentLength,
-                        'status_code' => $response->getStatusCode(),
-                        'body' => $body
+                        'status_code' => $statusCode
                     ]);
-            }, 
-            function(RequestException $e) {
-            }
-        );
-        $promise->wait();
+        }
         return;
     }
 }

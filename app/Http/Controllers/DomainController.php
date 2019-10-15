@@ -33,7 +33,7 @@ class DomainController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'pagesAdress' => 'required|url|unique:domains,name'
+            'pagesAdress' => 'required|url'
         ]);
         if ($validator->fails()) {
             $data = [
@@ -47,6 +47,7 @@ class DomainController extends Controller
             ['name' => $url]
         );
         $id = DB::table('domains')->max('id');
+        $client = app('productionClient');
         dispatch(new PageParserJob($url, $id));
         dispatch(new SeoParserJob($url, $id));
         return redirect()->route('domains.show', ['id' => $id]);

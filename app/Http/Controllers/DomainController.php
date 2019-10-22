@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Jobs\PageParserJob;
@@ -43,10 +42,10 @@ class DomainController extends Controller
             return redirect()->route('domains.create', $data);
         }
         $url = $request['pagesAdress'];
-        DB::table('domains')->insert(
-            ['name' => $url]
-        );
-        $id = DB::table('domains')->max('id');
+        $domain = new \App\Domain();
+        $domain->name = $url;
+        $domain->save();
+        $id = $domain->id;
         $client = app('productionClient');
         dispatch(new PageParserJob($url, $id));
         dispatch(new SeoParserJob($url, $id));
@@ -55,13 +54,13 @@ class DomainController extends Controller
 
     public function show($id)
     {
-        $domain = DB::table('domains')->where('id', $id)->first();
+        $domain = \App\Domain::find($id);
         return view('domain.show', ['domain' => $domain]);
     }
     
     public function index()
     {
-        $domains = DB::table('domains')->paginate(10);
+        $domains = \App\Domain::paginate(10);
         return view('domain.index', ['domains' => $domains]);
     }
 }

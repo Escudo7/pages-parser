@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Exception\RequestException;
 
 class PageParserJob extends Job
@@ -32,20 +31,15 @@ class PageParserJob extends Job
     public function handle()
     {
         $client = app($this->clientName);
-        
         try {
             $promise = $client->getAsync($this->url);
             $promise->then(
                 function($response) {  
-                    $body = utf8_encode($response->getBody());
-                    $contentLength = strlen($body);
-                    DB::table('domains')
-                        ->where('id', $this->id)
-                        ->update([
-                            'content_length' => $contentLength,
-                            'status_code' => $response->getStatusCode(),
-                            'body' => $body
-                        ]);
+                    $domain = \App\Domain::find($this->id);                   
+                    $domain->status_code = $response->getStatusCode();
+                    $domain->body = utf8_encode($response->getBody());
+                    $domain->content_length = strlen($domain->body);
+                    $domain->save();
                 }
             );
             $promise->wait();
@@ -57,11 +51,9 @@ class PageParserJob extends Job
             } else {
                 $statusCode = 'ERROR';
             }
-            DB::table('domains')
-                    ->where('id', $this->id)
-                    ->update([
-                        'status_code' => $statusCode
-                    ]);
+            $domain = \App\Domain::find($this->id);
+            $domain->status_code = $statusCode;
+            $domain->save();
         }
         return;
     }

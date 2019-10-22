@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use Illuminate\Support\Facades\DB;
 use DiDom\Document;
 
 class SeoParserJob extends Job
@@ -59,14 +58,11 @@ class SeoParserJob extends Job
         } else {
             $description = '';
         }
-        
-        DB::table('domains')
-            ->where('id', $this->id)
-            ->update([
-                'heading' => $heading,
-                'keywords' => $keywords,
-                'description' => $description
-                ]);
+        $domain = \App\Domain::find($this->id);
+        $domain->heading = $heading;
+        $domain->keywords = $keywords;
+        $domain->description = $description;
+        $domain->save();
         return;
     }
 }

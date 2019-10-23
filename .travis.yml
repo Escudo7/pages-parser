@@ -3,5 +3,5 @@ install: make install
 before_script:
   - cp .env.travis .env
 script: 
-  - make lint
+  - make lint test
   - vendor/bin/phpunit --configuration phpunit.xml

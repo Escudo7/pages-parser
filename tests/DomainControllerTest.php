@@ -48,7 +48,7 @@ class DomainControllerTest extends TestCase
 
     public function testIndex()
     {
-        $this->get(route('domains.index'));
+$this->get(route('domains.index'));
         $this->seeStatusCode(200);
     }
 

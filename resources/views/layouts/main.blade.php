@@ -9,18 +9,18 @@
             crossorigin="anonymous">
     </head>
     <body>
-        @yield('content')
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-            <div class="navbar-collapse">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{ route('domains.create') }}">Pages Parser</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{ route('domains.index') }}">Domain List</a>
-                    </li>
-                </ul>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{{ route('domains.create') }}">Pages Parser</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" href="{{ route('domains.create') }}">Home<span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link active" href="{{ route('domains.index') }}">Domain list</a>
+                </div>
             </div>
         </nav>
+        @yield('content')
     </body>
 </html>

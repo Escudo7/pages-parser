@@ -4,7 +4,7 @@
     <table class='table table-bordered table-hover table-sm'>
         <thead class='thead-dark'>
             <tr>
-            <th>ID</th>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Content-length</th>
                 <th>Status code</th>
@@ -13,7 +13,7 @@
                 <th>Description</th>
             </tr>
         </thead>
-        <tr class='table-info'>
+        <tr>
             <td>{{ $domain->id }}</td>
             <td><a href="{{ $domain->name }}">{{ $domain->name }}</a></td>
             <td>{{ $domain->content_length }}</td>

@@ -16,9 +16,8 @@ class SeoParserJob extends Job
      * @return void
      */
 
-    public function __construct($url, $id, $seoParserName = 'seoParser')
+    public function __construct($id, $seoParserName = 'seoParser')
     {
-        $this->url = $url;
         $this->id = $id;
         $this->seoParserName = $seoParserName;
     }

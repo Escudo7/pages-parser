@@ -47,8 +47,8 @@ class DomainController extends Controller
         $domain->name = $url;
         $domain->save();
         $id = $domain->id;
-        dispatch(new PageParserJob($url, $id, $clientName));
-        dispatch(new SeoParserJob($url, $id));
+        dispatch(new PageParserJob($id, $clientName));
+        dispatch(new SeoParserJob($id));
         return redirect()->route('domains.show', ['id' => $id]);
     }        
 

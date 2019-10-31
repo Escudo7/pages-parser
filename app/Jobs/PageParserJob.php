@@ -16,9 +16,8 @@ class PageParserJob extends Job
      * @return void
      */
 
-    public function __construct($url, $id, $clientName)
+    public function __construct($id, $clientName)
     {
-        $this->url = $url;
         $this->id = $id;
         $this->clientName = $clientName;
     }
@@ -31,13 +30,13 @@ class PageParserJob extends Job
     public function handle()
     {
         $client = app($this->clientName);
+        $domain = \App\Domain::find($this->id);
         try {
-            $promise = $client->getAsync($this->url);
+            $promise = $client->getAsync($domain->name);
             $promise->then(
-                function($response) {  
-                    $domain = \App\Domain::find($this->id);                   
+                function($response) use ($domain) {                     
                     $domain->status_code = $response->getStatusCode();
-                    $domain->body = utf8_encode($response->getBody());
+                    $domain->body = mb_convert_encoding($response->getBody(), "UTF-8");
                     $domain->content_length = strlen($domain->body);
                     $domain->save();
                 }

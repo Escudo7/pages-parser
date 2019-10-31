@@ -30,9 +30,11 @@ class SeoParserJob extends Job
      */
     public function handle()
     {
+        $domain = \App\Domain::find($this->id);
+        $html = $domain->body;
         try {
             $document = app($this->seoParserName);
-            $document->loadHtmlFile($this->url);
+            $document->loadHtml($html);
         } catch (\Exception $e) {
             return;
         }

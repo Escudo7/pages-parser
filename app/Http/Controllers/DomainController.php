@@ -15,7 +15,7 @@ class DomainController extends Controller
      *
      * @return void
      */
-    public function __construct(\GuzzleHttp\Client $client)
+    public function __construct()
     {
         //
     }
@@ -29,8 +29,9 @@ class DomainController extends Controller
         return view('domain.create', $data);
     }
     
-    public function store(Request $request)
+    public function store(Request $request, $err, $standartClientName = 'productionClient')
     {
+        $clientName = $request['clientName'] ?? $standartClientName;
         $validator = Validator::make($request->all(), [
             'pagesAdress' => 'required|url'
         ]);
@@ -46,8 +47,7 @@ class DomainController extends Controller
         $domain->name = $url;
         $domain->save();
         $id = $domain->id;
-        $client = app('productionClient');
-        dispatch(new PageParserJob($url, $id));
+        dispatch(new PageParserJob($url, $id, $clientName));
         dispatch(new SeoParserJob($url, $id));
         return redirect()->route('domains.show', ['id' => $id]);
     }        

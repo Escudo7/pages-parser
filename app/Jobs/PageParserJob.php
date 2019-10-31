@@ -16,7 +16,7 @@ class PageParserJob extends Job
      * @return void
      */
 
-    public function __construct($url, $id, $clientName = 'productionClient')
+    public function __construct($url, $id, $clientName)
     {
         $this->url = $url;
         $this->id = $id;

@@ -15,7 +15,7 @@ class UpdateDomainsTable extends Migration
     {
         Schema::table('domains', function (Blueprint $table) {
             $table->bigInteger('content_length')->nullable();
-            $table->integer('status_code')->nullable();
+            $table->string('status_code')->nullable();
             $table->text('body')->nullable();
         });
     }

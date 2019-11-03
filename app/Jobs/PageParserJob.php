@@ -31,7 +31,11 @@ class PageParserJob extends Job
                 function($response) use ($domain) {                     
                     $domain->status_code = $response->getStatusCode();
                     $body = $response->getBody();
-                    $domain->body = iconv(mb_detect_encoding($body, mb_detect_order(), true), "UTF-8", $body);
+                    if (mb_detect_encoding($body) !== 'UTF-8') {
+                        $domain->body = utf8_encode($body);
+                    } else {
+                        $domain->body = $body;
+                    }
                     $domain->content_length = strlen($domain->body);
                     $domain->save();
                 }

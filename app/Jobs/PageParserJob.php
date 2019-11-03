@@ -30,7 +30,8 @@ class PageParserJob extends Job
             $promise->then(
                 function($response) use ($domain) {                     
                     $domain->status_code = $response->getStatusCode();
-                    $domain->body = $response->getBody();
+                    $body = $response->getBody();
+                    $domain->body = iconv(mb_detect_encoding($body, mb_detect_order(), true), "UTF-8", $body);
                     $domain->content_length = strlen($domain->body);
                     $domain->save();
                 }

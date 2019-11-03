@@ -6,9 +6,7 @@ use DiDom\Document;
 
 class SeoParserJob extends Job
 {
-    protected $url;
     protected $id;
-    protected $seoParserName;
     
     /**
      * Create a new job instance.
@@ -16,10 +14,9 @@ class SeoParserJob extends Job
      * @return void
      */
 
-    public function __construct($id, $seoParserName = 'seoParser')
+    public function __construct($id)
     {
         $this->id = $id;
-        $this->seoParserName = $seoParserName;
     }
 
     /**
@@ -27,12 +24,11 @@ class SeoParserJob extends Job
      *
      * @return void
      */
-    public function handle()
+    public function handle(\DiDom\Document $document)
     {
         $domain = \App\Domain::find($this->id);
         $html = $domain->body;
         try {
-            $document = app($this->seoParserName);
             $document->loadHtml($html);
         } catch (\Exception $e) {
             return;
@@ -59,7 +55,6 @@ class SeoParserJob extends Job
         } else {
             $description = '';
         }
-        $domain = \App\Domain::find($this->id);
         $domain->heading = $heading;
         $domain->keywords = $keywords;
         $domain->description = $description;

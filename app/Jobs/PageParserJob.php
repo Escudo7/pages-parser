@@ -2,13 +2,9 @@
 
 namespace App\Jobs;
 
-use GuzzleHttp\Exception\RequestException;
-
 class PageParserJob extends Job
 {
-    protected $url;
     protected $id;
-    protected $clientName;
     
     /**
      * Create a new job instance.
@@ -16,10 +12,9 @@ class PageParserJob extends Job
      * @return void
      */
 
-    public function __construct($id, $clientName)
+    public function __construct($id)
     {
         $this->id = $id;
-        $this->clientName = $clientName;
     }
 
     /**
@@ -27,9 +22,8 @@ class PageParserJob extends Job
      *
      * @return void
      */
-    public function handle()
+    public function handle(\GuzzleHttp\Client $client)
     {
-        $client = app($this->clientName);
         $domain = \App\Domain::find($this->id);
         try {
             $promise = $client->getAsync($domain->name);
@@ -42,16 +36,8 @@ class PageParserJob extends Job
                 }
             );
             $promise->wait();
-        } catch (RequestException $e) {
-            if ($e instanceof \GuzzleHttp\Exception\ConnectException) {
-                $statusCode = "Bad connect!";
-            } elseif ($e->hasResponse()) {
-                $statusCode = $e->getResponse()->getStatusCode();
-            } else {
-                $statusCode = 'ERROR';
-            }
-            $domain = \App\Domain::find($this->id);
-            $domain->status_code = $statusCode;
+        } catch (\Exception $e) {
+            $domain->status_code = 'ERROR CONNECTION!';
             $domain->save();
         }
         return;

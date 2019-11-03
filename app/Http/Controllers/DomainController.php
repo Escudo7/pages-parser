@@ -9,7 +9,6 @@ use App\Jobs\SeoParserJob;
 
 class DomainController extends Controller
 {
-    
     /**
      * Create a new controller instance.
      *
@@ -29,25 +28,26 @@ class DomainController extends Controller
         return view('domain.create', $data);
     }
     
-    public function store(Request $request, $err, $standartClientName = 'productionClient')
-    {
-        $clientName = $request['clientName'] ?? $standartClientName;
+    public function store(Request $request)
+    {   
+        $url = $request['pagesAdress'];
+        
         $validator = Validator::make($request->all(), [
             'pagesAdress' => 'required|url'
         ]);
         if ($validator->fails()) {
             $data = [
                 'errors' => $validator->errors()->all(),
-                'url' => $request['pagesAdress']
+                'url' => $url
             ];
             return redirect()->route('domains.create', $data);
         }
-        $url = $request['pagesAdress'];
+        
         $domain = new \App\Domain();
         $domain->name = $url;
         $domain->save();
         $id = $domain->id;
-        dispatch(new PageParserJob($id, $clientName));
+        dispatch(new PageParserJob($id));
         dispatch(new SeoParserJob($id));
         return redirect()->route('domains.show', ['id' => $id]);
     }        

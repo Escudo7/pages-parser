@@ -52,12 +52,12 @@ if (env('APP_DEBUG')) {
     $app->configure('debugbar');
    }
 
-$app->bind('productionClient', function ($app) {
+$app->bind('GuzzleHttp\Client', function ($app) {
     return new GuzzleHttp\Client([
         'timeout' => 3.0]);
 });
 
-$app->bind('seoParser', function ($app) {
+$app->bind('DiDom\Document', function ($app) {
     return new DiDom\Document();
 });
 

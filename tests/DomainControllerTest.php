@@ -14,12 +14,11 @@ class DomainControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->clientName = 'testClient';
         $this->url = Faker\Factory::create()->url;
         $statusCode = 200;
         $body = file_get_contents(__DIR__ . '/testsFiles/testPage.html');
         
-        $this->app->bind($this->clientName, function ($app) use ($statusCode, $body) {
+        $this->app->bind('GuzzleHttp\Client', function ($app) use ($statusCode, $body) {
             $headers = ['content-length' => 0];
             $protocol = '1.1';
             $mock = new GuzzleHttp\Handler\MockHandler([
@@ -27,7 +26,6 @@ class DomainControllerTest extends TestCase
             ]);
             $handler = GuzzleHttp\HandlerStack::create($mock);
             return new GuzzleHttp\Client(['handler' => $handler]);
-        
         });
 
         $this->testDataInDatabase = [
@@ -44,10 +42,7 @@ class DomainControllerTest extends TestCase
     public function testStore()
     {   
         $this->assertEquals(0, \App\Domain::count());
-        $this->post(route('domains.store'), [
-            'clientName' => $this->clientName,
-            'pagesAdress' => $this->url]
-        );
+        $this->post(route('domains.store'), ['pagesAdress' => $this->url]);
         $this->seeStatusCode(302);
         $this->seeInDatabase('domains', $this->testDataInDatabase);
     }

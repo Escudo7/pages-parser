@@ -4,7 +4,11 @@
 https://pages-parser.herokuapp.com/
 
 Проект на микрофреймворке [Lumen](https://lumen.laravel.com), который анализирует указанные страницы на SEO пригодность.
+
 Фронтенд: Bootstrap.
+
 БД: PostgreSQL (production), SQLite (development).
+
 Тесты: PHPUnit.
+
 Развернут на Heroku.
